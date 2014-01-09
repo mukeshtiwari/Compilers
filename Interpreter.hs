@@ -51,18 +51,24 @@ interpret ( While expr c ) s
      w = switch t ( interpret c ) id s 
 
 
+{--
 
-{-
 data Token where 
 	Ident :: String -> Token
 	Symbol :: String -> Token
 	Number :: Int -> Token
--}
 
+instance Show Token where 
+       show ( Ident s ) = "Ident " ++ s
+       show ( Symbol s ) = "Symbol " ++ s
+       show ( Number n ) = "Number " ++ show n
+
+--}
 data Token = Ident String
            | Symbol String
            | Number Int 
            deriving Show
+
 
 lexer :: String -> [ Token ]
 lexer [] = []
@@ -81,3 +87,8 @@ lexer ( ' ' : xs ) = lexer xs
 lexer t@( x : xs ) 
    | isDigit x =  let ( as , bs ) = span isDigit t in Number ( read as :: Int ) : lexer bs
    | otherwise = let ( as , bs ) = break isSpace t in Ident as : lexer bs
+
+
+type Parser a = [ Token ] -> Maybe ( Command, [ Token ] )
+
+
