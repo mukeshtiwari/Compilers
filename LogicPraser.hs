@@ -53,15 +53,11 @@ variables expr = map head . group . sort . vars expr $ []  where
 expEval :: LExpr -> M.Map Char  Bool -> Bool
 expEval ( Lit v   )         mp =  fromMaybe False ( M.lookup v mp )
 expEval ( Not expr  )       mp =  not . expEval  expr $ mp
-expEval ( And exprf exprs ) mp =  expEval exprf mp &&   expEval  exprs mp
-expEval ( Or  exprf exprs ) mp =  expEval exprf mp ||   expEval  exprs mp
-expEval ( Imp exprf exprs ) mp =  (  not . expEval  exprf $ mp  ) ||   expEval exprs mp 
+expEval ( And exprf exprs ) mp =  expEval exprf mp && expEval  exprs mp
+expEval ( Or  exprf exprs ) mp =  expEval exprf mp || expEval  exprs mp
+expEval ( Imp exprf exprs ) mp =  (  not . expEval  exprf $ mp  ) || expEval exprs mp 
 expEval ( Red exprf exprs ) mp =  expEval ( Imp exprs exprf  ) mp 
-expEval ( Eqi exprf exprs ) mp
-       | first == second  = True
-       | otherwise  = False where
-          first  = expEval exprf mp
-          second = expEval exprs mp
+expEval ( Eqi exprf exprs ) mp =  expEval exprf mp == expEval exprs mp
 
 values :: LExpr -> [ Bool ]
 values expr = map ( expEval expr ) ( assignment expr ) 
@@ -73,7 +69,7 @@ isContradiction :: LExpr -> Bool
 isContradiction  = not . or . values
 
 isContingent :: LExpr -> Bool
-isContingent expr = not (isTautology expr || isContradiction expr)
+isContingent expr = not ( isTautology expr || isContradiction expr )
   
 calculator :: String -> LExpr
 calculator expr = case parse  exprCal ""  expr of
