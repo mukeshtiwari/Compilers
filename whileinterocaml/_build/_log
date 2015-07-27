@@ -1,0 +1,27 @@
+### Starting build.
+# Target: main.ml.depends, tags: { extension:ml, file:main.ml, ocaml, ocamldep, package(ppx_deriving.std), quiet }
+ocamlfind ocamldep -package ppx_deriving.std -modules main.ml > main.ml.depends # cached
+# Target: lexer.mll, tags: { extension:mll, file:lexer.mll, lexer, ocaml, ocamllex, package(ppx_deriving.std), quiet }
+/Users/mukeshtiwari/.opam/4.02.1/bin/ocamllex.opt -q lexer.mll
+# Target: lexer.ml.depends, tags: { extension:ml, file:lexer.ml, ocaml, ocamldep, package(ppx_deriving.std), quiet }
+ocamlfind ocamldep -package ppx_deriving.std -modules lexer.ml > lexer.ml.depends
+# Target: parser.mly.depends, tags: { extension:mly, file:parser.mly, menhir_ocamldep, ocaml, ocamldep, package(ppx_deriving.std), quiet }
+menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' parser.mly > parser.mly.depends # cached
+# Target: syntax.ml.depends, tags: { extension:ml, file:syntax.ml, ocaml, ocamldep, package(ppx_deriving.std), quiet }
+ocamlfind ocamldep -package ppx_deriving.std -modules syntax.ml > syntax.ml.depends # cached
+# Target: syntax.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:syntax.cmo, file:syntax.ml, implem, ocaml, package(ppx_deriving.std), quiet }
+ocamlfind ocamlc -c -package ppx_deriving.std -o syntax.cmo syntax.ml # cached
+# Target: parser.mly, tags: { byte, compile, extension:mly, file:parser.mly, menhir, ocaml, package(ppx_deriving.std), parser, quiet }
+menhir --ocamlc 'ocamlfind ocamlc -package ppx_deriving.std' --infer parser.mly # cached
+# Target: parser.mli.depends, tags: { extension:mli, file:parser.mli, ocaml, ocamldep, package(ppx_deriving.std), quiet }
+ocamlfind ocamldep -package ppx_deriving.std -modules parser.mli > parser.mli.depends # cached
+# Target: parser.cmi, tags: { byte, compile, extension:mli, file:parser.mli, interf, ocaml, package(ppx_deriving.std), quiet }
+ocamlfind ocamlc -c -package ppx_deriving.std -o parser.cmi parser.mli # cached
+# Target: lexer.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:lexer.cmo, file:lexer.ml, implem, ocaml, package(ppx_deriving.std), quiet }
+ocamlfind ocamlc -c -package ppx_deriving.std -o lexer.cmo lexer.ml
++ ocamlfind ocamlc -c -package ppx_deriving.std -o lexer.cmo lexer.ml
+File "lexer.mll", line 11, characters 16-19:
+Error: This expression has type char but an expression was expected of type
+         string
+Command exited with code 2.
+# Compilation unsuccessful.
